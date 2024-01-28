@@ -15,7 +15,6 @@ import { AppModule } from './app.module'
 import { LoggingInterceptor } from './common/interceptors/logging/logging.interceptor'
 import { TimeoutInterceptor } from './common/interceptors/timeout/timeout.interceptor'
 import swaggerConfig from './config/swagger.config'
-import { CORRELATION_ID_HEADER } from './common/middleware/correlation-id/correlation-id.middleware'
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -68,18 +67,7 @@ async function bootstrap() {
         customSiteTitle: 'API',
         swaggerOptions: {
             persistAuthorization: true,
-            requestInterceptor: (req) => {
-                req.headers[CORRELATION_ID_HEADER] = 'SWAGGER DOCS'
-                return req
-            },
         },
-        // Set global header for all endpoints
-        // swaggerOptions: {
-        //     requestInterceptor: (req) => {
-        //         req.headers['x-api-key'] = '12345'
-        //         return req
-        //     },
-        // },
     })
     const HOST = configService.get<string>(Environments.HOST, 'localhost')
     const PORT = configService.get<number>(Environments.PORT, 3000)

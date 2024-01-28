@@ -9,7 +9,6 @@ import { Reflector } from '@nestjs/core'
 import { UsersService } from '@server/users/users.service'
 import { isFalsy } from '@utils/validation.util'
 import { FastifyRequest } from 'fastify'
-import { UserRoles } from 'src/models/user-roles.enum'
 
 import { JwtAuthService } from './jwt-auth.service'
 
@@ -84,7 +83,6 @@ export class JwtAuthGuard implements CanActivate {
             req.user = {
                 id: user.id,
                 email: user.email,
-                roleCode: user.role.code as UserRoles,
             }
 
             return true

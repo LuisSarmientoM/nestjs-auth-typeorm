@@ -2,42 +2,32 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn,
-    ManyToOne,
     PrimaryGeneratedColumn,
     Unique,
     UpdateDateColumn,
 } from 'typeorm'
 
-import { UserRoles } from './user-role.entity'
-
 @Entity()
 @Unique(['email'])
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string
+    id!: string
 
     @Column({ nullable: false })
-    email: string
+    email!: string
 
     @Column({ nullable: true })
-    password: string
+    password!: string
 
     @Column()
-    name: string
-
-    @ManyToOne(() => UserRoles, (userRole) => userRole.id, {
-        eager: true,
-    })
-    @JoinColumn()
-    role: UserRoles
+    name!: string
 
     @Column({ type: 'bool', default: true })
-    isActive: boolean
+    isActive!: boolean
 
     @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date
+    updatedAt!: Date
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date
+    createdAt!: Date
 }

@@ -10,5 +10,4 @@ export interface JwtPayload {
 
 export interface Current extends Uuid {
     email: string
-    roleCode: string
 }

@@ -15,10 +15,9 @@ import { JwtAuthService } from '../../core/auth/jwt-auth/jwt-auth.service'
 import { RecoveryPassword } from '../../core/auth/local-auth/user-recovery.entity'
 import { changePasswordDto } from './dto/change-password.dto'
 import { CreateUserDto } from './dto/create-user.dto'
-import { ReadUserDto, ReadUserWithRoleDto } from './dto/read-user.dto'
+import { ReadUserDto } from './dto/read-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
-import { UserRoles } from './entities/user-role.entity'
 
 /**
  * UsersService is a service that handles user-related operations.
@@ -40,9 +39,6 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,
 
-        @InjectRepository(UserRoles)
-        private userRolesRepository: Repository<UserRoles>,
-
         @InjectRepository(RecoveryPassword)
         private readonly recoveryPasswordRepository: Repository<RecoveryPassword>,
 
@@ -58,9 +54,6 @@ export class UsersService {
      */
     async create(dto: CreateUserDto) {
         const newUser = this.usersRepository.create(dto)
-        const UserRoles = await this.userRolesRepository.findOneBy({ id: 1 })
-        if (!UserRoles) throw new NotFoundException('Rol no encontrado')
-        newUser.role = UserRoles
 
         const user = await this.usersRepository.save(newUser)
 
@@ -85,11 +78,11 @@ export class UsersService {
      * Find users and count.
      * It takes a SearchPaginatedDto object as input which can include filters and pagination options.
      * @param {SearchPaginatedDto} dto - The SearchPaginatedDto object containing the filters and pagination options.
-     * @returns {Promise<PaginatedResponseDto<ReadUserWithRoleDto>>} A promise that resolves to a PaginatedResponseDto object containing the users' data.
+     * @returns {Promise<PaginatedResponseDto<ReadUserDto>>} A promise that resolves to a PaginatedResponseDto object containing the users' data.
      */
     async findAll(
         filter: SearchPaginatedDto,
-    ): Promise<PaginatedResponseDto<ReadUserWithRoleDto>> {
+    ): Promise<PaginatedResponseDto<ReadUserDto>> {
         const [data, count] = await this.usersRepository.findAndCount({
             where: {
                 email: ILike(`%${filter.term}%`),
@@ -97,13 +90,12 @@ export class UsersService {
             order: {
                 name: 'ASC',
             },
-            relations: ['role'],
             skip: filter.offset * filter.limit,
             take: filter.limit,
         })
 
         return {
-            data: data.map((user) => plainToClass(ReadUserWithRoleDto, user)),
+            data: data.map((user) => plainToClass(ReadUserDto, user)),
             count,
         }
     }
@@ -112,12 +104,12 @@ export class UsersService {
      * Find user by id.
      * It takes a string as input which is the id of the user to be found.
      * @param {string} id - The id of the user to be found.
-     * @returns {Promise<ReadUserWithRoleDto>} A promise that resolves to a ReadUserWithRoleDto object containing the user's data.
+     * @returns {Promise<ReadUserDto>} A promise that resolves to a ReadUserDto object containing the user's data.
      */
-    async findOne(id: string): Promise<ReadUserWithRoleDto> {
+    async findOne(id: string): Promise<ReadUserDto> {
         const user = await this.usersRepository.findOneBy({ id })
         if (!user) throw new NotFoundException('El usuario no existe')
-        return plainToClass(ReadUserWithRoleDto, user)
+        return plainToClass(ReadUserDto, user)
     }
 
     // todo prevent update email
@@ -154,8 +146,7 @@ export class UsersService {
     async findOneComplete(email: string) {
         const user = await this.usersRepository.findOne({
             where: { email },
-            select: ['id', 'name', 'email', 'isActive', 'role', 'password'],
-            relations: ['role'],
+            select: ['id', 'name', 'email', 'isActive', 'password'],
         })
         if (!user) throw new NotFoundException('El usuario no existe')
         return user
@@ -164,7 +155,7 @@ export class UsersService {
     /**
      * Toggles the active status of a user.
      * @param {string} dto - The id of the user to be updated.
-     * @returns {Promise<ReadUserWithRoleDto>} A promise that resolves to a ReadUserWithRoleDto object containing the updated user's data.
+     * @returns {Promise<ReadUserDto>} A promise that resolves to a ReadUserDto object containing the updated user's data.
      */
     async toggleActive(id: string) {
         const findUser = await this.usersRepository.findOneBy({
@@ -176,7 +167,7 @@ export class UsersService {
 
         const user = await this.usersRepository.save(findUser)
 
-        return plainToClass(ReadUserWithRoleDto, user)
+        return plainToClass(ReadUserDto, user)
     }
 
     /**

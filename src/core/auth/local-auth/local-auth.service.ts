@@ -31,10 +31,10 @@ export class LocalAuthService {
 
     /**
      * Validates a user's credentials.
-     * If the user's credentials are valid, it returns the user's id, email, role, and isActive status.
+     * If the user's credentials are valid, it returns the user's id, email, and isActive status.
      * @param {string} email - The email of the user.
      * @param {string} password - The password of the user.
-     * @returns {Object} An object containing the user's id, email, role, and isActive status.
+     * @returns {Object} An object containing the user's id, email, and isActive status.
      */
     async validateUser(email: string, password: string) {
         const user = await this.userService.findOneComplete(email)
@@ -49,7 +49,6 @@ export class LocalAuthService {
             return {
                 id: user.id,
                 email: user.email,
-                role: user.role,
                 isActive: user.isActive,
             }
         }
@@ -115,7 +114,7 @@ export class LocalAuthService {
                 userId: id,
             })
 
-        if (isFalsy(recoveryPassword)) {
+        if (!recoveryPassword) {
             throw new BadRequestException('Token inválido')
         }
 

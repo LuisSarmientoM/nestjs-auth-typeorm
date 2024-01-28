@@ -23,7 +23,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { changePasswordDto } from './dto/change-password.dto'
 import { CreateUserDto } from './dto/create-user.dto'
-import { ReadUserDto, ReadUserWithRoleDto } from './dto/read-user.dto'
+import { ReadUserDto } from './dto/read-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UsersService } from './users.service'
 
@@ -52,7 +52,7 @@ export class UsersController {
         description: 'The user has been successfully found.',
         type: ReadUserDto,
     })
-    currentUSer(@CurrentUser() { id }: Current): Promise<ReadUserWithRoleDto> {
+    currentUSer(@CurrentUser() { id }: Current): Promise<ReadUserDto> {
         return this.usersService.findOne(id)
     }
 
@@ -95,10 +95,10 @@ export class UsersController {
     @ApiOperation({
         summary: 'Get all users paginated and can filter by email',
     })
-    @ApiOkResponsePaginated(ReadUserWithRoleDto)
+    @ApiOkResponsePaginated(ReadUserDto)
     findAll(
         @Query() dto: SearchPaginatedDto,
-    ): Promise<PaginatedResponseDto<ReadUserWithRoleDto>> {
+    ): Promise<PaginatedResponseDto<ReadUserDto>> {
         return this.usersService.findAll(dto)
     }
 
@@ -106,20 +106,20 @@ export class UsersController {
      * Toggles the active status of a user.
      * It takes the id of the user as input.
      * @param {Uuid} id - The id of the user.
-     * @returns {Promise<ReadUserWithRoleDto>} A promise that resolves to a ReadUserDto object containing the updated user's data.
+     * @returns {Promise<ReadUserDto>} A promise that resolves to a ReadUserDto object containing the updated user's data.
      */
     @Get(':id/toggle-active')
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'The user has been successfully disable or enable.',
-        type: ReadUserWithRoleDto,
+        type: ReadUserDto,
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
         description: 'The user does not exist.',
         type: ErrorResponse,
     })
-    toggleActive(@Param() { id }: Uuid): Promise<ReadUserWithRoleDto> {
+    toggleActive(@Param() { id }: Uuid): Promise<ReadUserDto> {
         return this.usersService.toggleActive(id)
     }
 
@@ -127,7 +127,7 @@ export class UsersController {
      * Gets a user by id.
      * It takes the id of the user as input.
      * @param {Uuid} id - The id of the user.
-     * @returns {Promise<ReadUserWithRoleDto>} A promise that resolves to a ReadUserWithRoleDto object containing the user's data.
+     * @returns {Promise<ReadUserDto>} A promise that resolves to a ReadUserDto object containing the user's data.
      */
     @Get(':id')
     @ApiOperation({
@@ -136,7 +136,7 @@ export class UsersController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'The user has been successfully found.',
-        type: ReadUserWithRoleDto,
+        type: ReadUserDto,
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
