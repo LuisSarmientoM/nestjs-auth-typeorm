@@ -1,8 +1,9 @@
-import { Global, Module } from '@nestjs/common'
+import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { JwtAuthModule } from '../../auth/jwt-auth/jwt-auth.module'
-import { RecoveryPassword } from '../../auth/local-auth/user-recovery.entity'
+import { CorrelationIdMiddleware } from '../../common/middleware/correlation-id/correlation-id.middleware'
+import { JwtAuthModule } from '../../core/auth/jwt-auth/jwt-auth.module'
+import { RecoveryPassword } from '../../core/auth/local-auth/user-recovery.entity'
 import { User } from './entities/user.entity'
 import { UserRoles } from './entities/user-role.entity'
 import { UsersController } from './users.controller'
@@ -25,4 +26,8 @@ import { UsersService } from './users.service'
     exports: [UsersService],
     providers: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(CorrelationIdMiddleware).forRoutes('*')
+    }
+}

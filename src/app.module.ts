@@ -1,14 +1,12 @@
 import { loggerOptions } from '@config/logger.config'
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { LoggerModule } from 'nestjs-pino'
 
-import { AuthModule } from './auth/auth.module'
-import { CorrelationIdMiddleware } from './common/middleware/correlation-id/correlation-id.middleware'
 import appConfig from './config/app.config'
 import databaseConnection from './config/database-connections'
-import { MailerModule } from './mailer/mailer.module'
+import { CoreModule } from './core/core.module'
 import { UsersModule } from './server/users/users.module'
 @Module({
     imports: [
@@ -19,15 +17,11 @@ import { UsersModule } from './server/users/users.module'
         LoggerModule.forRoot(loggerOptions),
         EventEmitterModule.forRoot(),
         databaseConnection(),
-        MailerModule,
         UsersModule,
-        AuthModule,
+        CoreModule,
+        LoggerModule,
     ],
     controllers: [],
     providers: [ConfigService],
 })
-export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(CorrelationIdMiddleware).forRoutes('*')
-    }
-}
+export class AppModule {}
