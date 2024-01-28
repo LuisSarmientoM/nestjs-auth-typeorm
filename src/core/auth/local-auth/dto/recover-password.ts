@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { changePasswordDto } from '@server/users/dto/change-password.dto'
 import { Expose } from 'class-transformer'
 import { IsString } from 'class-validator'
+
+import { changePasswordDto } from '@core/users/dto/change-password.dto'
 
 /**
  * RecoveryPasswordDto is a data transfer object used for password recovery requests.

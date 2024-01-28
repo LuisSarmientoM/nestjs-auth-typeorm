@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UsersModule } from '@server/users/users.module'
+
+import { UsersModule } from '@core/users/users.module'
 
 import { JwtAuthModule } from '../jwt-auth/jwt-auth.module'
 import { LocalAuthController } from './local-auth.controller'

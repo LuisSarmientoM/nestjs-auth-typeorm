@@ -6,10 +6,11 @@ import {
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UsersService } from '@server/users/users.service'
 import { isFalsy } from '@utils/validation.util'
 import { compareSync } from 'bcrypt'
 import { Repository } from 'typeorm'
+
+import { UsersService } from '@core/users/users.service'
 
 import { JwtAuthService } from '../jwt-auth/jwt-auth.service'
 import { RecoveryPasswordDto } from './dto/recover-password'

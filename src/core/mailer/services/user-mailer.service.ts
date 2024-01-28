@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { User } from '@server/users/entities/user.entity'
+
+import { User } from '@core/users/entities/user.entity'
 
 import { MailerService } from './mailer.service'
 

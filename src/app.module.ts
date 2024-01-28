@@ -4,10 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { LoggerModule } from 'nestjs-pino'
 
+import { CoreModule } from '@core/core.module'
+
 import appConfig from './config/app.config'
 import databaseConnection from './config/database-connections'
-import { CoreModule } from './core/core.module'
-import { UsersModule } from './server/users/users.module'
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -17,7 +17,6 @@ import { UsersModule } from './server/users/users.module'
         LoggerModule.forRoot(loggerOptions),
         EventEmitterModule.forRoot(),
         databaseConnection(),
-        UsersModule,
         CoreModule,
         LoggerModule,
     ],

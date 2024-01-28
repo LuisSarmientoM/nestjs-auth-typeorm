@@ -25,6 +25,7 @@
             "@decorators/*": ["src/common/decorators/*"],
             "@server/*": ["src/server/*"],
             "@config/*": ["src/config/*"],
+            "@core/*": ["src/core/*"],
         },
         "inlineSources": true,
     },

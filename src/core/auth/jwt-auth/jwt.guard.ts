@@ -6,9 +6,10 @@ import {
     UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { UsersService } from '@server/users/users.service'
 import { isFalsy } from '@utils/validation.util'
 import { FastifyRequest } from 'fastify'
+
+import { UsersService } from '@core/users/users.service'
 
 import { JwtAuthService } from './jwt-auth.service'
 
