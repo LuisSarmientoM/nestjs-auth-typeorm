@@ -33,7 +33,7 @@ export class MailerService {
         name: string,
     ): Handlebars.TemplateDelegate<TemplateData> {
         const templateText = readFileSync(
-            join(__dirname, '../../../assets/templates', name),
+            join(__dirname, '../../../../assets/templates', name),
             'utf8',
         )
         return Handlebars.compile<TemplateData>(templateText, {
